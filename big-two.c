@@ -15,12 +15,13 @@ typedef struct
 } card;
 
 
-int init(int *deck);
+int init(card deck[]);
+void displayCard(card playingCard);
 
 
 int main(void) 
 {
-    card *deck[52];
+    card deck[52];
 
     // Initialize 
     printf("Welcome to Big Two!\n");
@@ -30,6 +31,7 @@ int main(void)
         return 1;
     }
 
+    // Display all cards in deck
     for (int i = 0; i < 52; i++)
     {
         displayCard(deck[i]);
@@ -40,7 +42,7 @@ int main(void)
 
 
 
-int init(int *deck)
+int init(card deck[])
 {
     // Create deck
     // Make 13 cards for each suit in ascending order
@@ -48,7 +50,7 @@ int init(int *deck)
 
     for (int i = 0; i < 4; i++)
     {
-        for (int j = 3; j < 15; j++)
+        for (int j = 3; j < 16; j++)
         {
             // Create new card structure and place in deck
             card* new = malloc(sizeof(card));
@@ -62,13 +64,68 @@ int init(int *deck)
             new -> suit = i;
             new -> value = j;
 
-            deck[pos] = new;
+            deck[pos] = *new;
             pos++;
         }
     }
 }
 
-void displayCard(card* playingCard)
+void displayCard(card playingCard)
 {
+    int suit = playingCard.suit;
+    int value = playingCard.value;
+    char* faceValue;
+    char* cardSuit;
 
+    switch (suit)
+        {
+            case 0:
+                cardSuit = "Diamonds";
+                break;
+
+            case 1:
+                cardSuit = "Clubs";
+                break;
+
+            case 2:
+                cardSuit = "Hearts";
+                break;
+
+            case 3:
+                cardSuit = "Spades";
+                break;
+        }
+
+    if (value > 10)
+    {
+        switch (value)
+        {
+            case 11:
+                faceValue = "Jack";
+                break;
+
+            case 12:
+                faceValue = "Queen";
+                break;
+
+            case 13:
+                faceValue = "King";
+                break;
+
+            case 14:
+                faceValue = "Ace";
+                break;
+
+            case 15:
+                faceValue = "2";
+                break;
+
+        }
+
+        printf("%s of %s\n", faceValue, cardSuit);
+    }
+    else
+    {
+        printf("%i of %s\n", value, cardSuit);
+    }
 }
