@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 typedef struct 
 {
@@ -17,6 +18,8 @@ typedef struct
 
 int init(card deck[]);
 void displayCard(card playingCard);
+void shuffle(card deck[]);
+void printDeck(card deck[]);
 
 
 int main(void) 
@@ -37,11 +40,23 @@ int main(void)
         displayCard(deck[i]);
     }
 
+    printf("\n\n\n");
+
+    // Shuffle array in place
+    shuffle(deck);
+    printDeck(deck);
+
+
+    // Deal cards to all players
+    // Will default to 4 players, possible implementation which allows players to choose amount of people in a room
+
+
+
     return 0;
 }
 
 
-
+// Initialize game by creating deck of 52 cards
 int init(card deck[])
 {
     // Create deck
@@ -70,6 +85,8 @@ int init(card deck[])
     }
 }
 
+
+// Prints out value of specified card and suit to screen
 void displayCard(card playingCard)
 {
     int suit = playingCard.suit;
@@ -127,5 +144,41 @@ void displayCard(card playingCard)
     else
     {
         printf("%i of %s\n", value, cardSuit);
+    }
+}
+
+// Randomly shuffles cards in given deck array
+void shuffle(card deck[])
+{
+    // Set seed to current random time
+    srand(time(NULL));
+
+    // Swap position of each element in the array with random element
+    for (int i = 0; i < 52; i++)
+    {
+        // Generate random index to swap currenet element with
+        int random;
+        random = rand() % 51;
+
+        // Ensure random index is not itself
+        while (random == i)
+        {
+            random = rand() % 51;
+        }
+
+        // Swap both elements
+        card tmp = deck[i];
+        deck[i] = deck[random];
+        deck[random] = tmp;
+    }
+}
+
+// Displays whole deck by running displayCard through all items in a set
+void printDeck(card deck[])
+{
+    // Display all cards in deck
+    for (int i = 0; i < 52; i++)
+    {
+        displayCard(deck[i]);
     }
 }
