@@ -17,35 +17,38 @@ typedef struct
 
 } card;
 
-typedef struct 
+typedef struct player
 {
     // Each player will be represented by a data structure,
-    // that contains an array of held cards
+    // that contains an array of held cards and a pointer to the next player.
+    // When a card is played, it will be replaced by a 0.
+    // The players will form a linked list that also serves as turn order.
     
     card hand[13];
+    struct player *next;
 
 } player;
 
 
 
-int init(card deck[]);
+int init(card deck[], int playerCount);
 void displayCard(card playingCard);
 void shuffle(card deck[]);
 void printDeck(card deck[]);
 void dealCards(card deck[], int playerCount);
+player *createPlayers(int playerCount);
 
 
 
 int main(void) 
 {
-    // Initiazlie some variables and constants
+    // Initiazlie variables and constants
     card deck[DECK_SIZE];
     int playerCount = 4;
-    player players[playerCount];
 
     // Initialize 
     printf("Welcome to Big Two!\n");
-    if (init(deck) == 1)
+    if (init(deck, playerCount) == 1)
     {
         printf("Failed to initialize\n");
         return 1;
@@ -73,8 +76,8 @@ int main(void)
 }
 
 
-// Initialize game by creating deck of 52 cards
-int init(card deck[])
+// Initialize game by creating deck of 52 cards and 4 players
+int init(card deck[], int playerCount)
 {
     // Create deck
     // Make 13 cards for each suit in ascending order
@@ -100,6 +103,8 @@ int init(card deck[])
             pos++;
         }
     }
+
+    player *firstPlayer = createPlayers(playerCount);
 }
 
 
@@ -206,7 +211,56 @@ void printDeck(card deck[])
 void dealCards(card deck[], int playerCount)
 {
     int cardsPerPlayer = DECK_SIZE / playerCount;
+}
 
-    // Create new player object for each player in the game
 
+// Creates a linked list to store all players in the game
+// Linked list also serves as representation of turn order, with the last player 
+// pointing back to the head of the list
+player *createPlayers(int playerCount)
+{
+    // Players will be stored as a linked list that also represents the turn order
+    player *head = NULL;
+
+    for (int i = 0; i < playerCount; i++)
+    {
+        // Create new player node
+        player *n = malloc(sizeof(player));
+
+        // Check for malloc errors
+        if (n == NULL)
+        {
+            return NULL;
+        }
+
+        if (head == NULL) {
+            head == n;
+        }
+        else
+        {
+            player *tmp = head;
+
+            // Traverse to the end of the linked list
+            while (tmp -> next != NULL)
+            {
+                tmp = tmp -> next;
+            }
+
+            // Add new node to end of linked list
+            tmp -> next = n;
+
+            // If current player node is last, set pointer back to head 
+            // Else, set pointer of new node to null
+            if (i == playerCount - 1)
+            {
+                n -> next = head;
+            }
+            else
+            {
+                n -> next = NULL;
+            }
+        }
+    }
+
+    return head;
 }
