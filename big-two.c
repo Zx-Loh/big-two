@@ -37,6 +37,7 @@ void shuffle(card deck[]);
 void printDeck(card deck[]);
 void dealCards(card deck[], int playerCount, player *head);
 player *createPlayers(int playerCount);
+void showHand(player* firstPlayer, int playerCount);
 
 
 
@@ -78,9 +79,13 @@ int main(void)
 
 
     // Deal cards to all players
-    // Will default to 4 players, possible implementation which allows players to choose amount of people in a room
+    // Defautl is 4 players, possible future implementation which allows players to choose amount of people in a room
     dealCards(deck, playerCount, firstPlayer);
 
+
+    // Show distributed hand cards of all players
+    showHand(firstPlayer, playerCount);
+    
 
     return 0;
 }
@@ -224,6 +229,22 @@ void dealCards(card deck[], int playerCount, player *head)
     int cardsPerPlayer = DECK_SIZE / playerCount;
 
     // Traverse player list
+    player *ptr = head;
+    int deckIndex = 0;
+
+    for (int i = 0; i < playerCount; i++)
+    {
+        for (int j = 0; j < cardsPerPlayer; j++)
+        {
+            // Assigns first X cards in shuffled deck to current player,
+            // where X is the amount of cardsPerPlayer
+            ptr -> hand[j] = deck[deckIndex];
+            deckIndex++;
+        }
+
+        // Move to next player
+        ptr = ptr -> next;
+    }
 }
 
 
@@ -277,4 +298,25 @@ player *createPlayers(int playerCount)
     }
 
     return head;
+}
+
+
+
+// Function that traverses through all players and prints out all their hand cards
+void showHand(player* firstPlayer, int playerCount)
+{
+    player *ptr = firstPlayer;
+
+    for (int i = 0; i < playerCount; i++)
+    {
+        printf("Player %i\n", i);
+
+        for (int j = 0; j < 13; j++)
+        {
+            displayCard(ptr -> hand[j]);
+        }
+
+        printf("\n");
+        ptr = ptr -> next;
+    }
 }
