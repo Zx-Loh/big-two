@@ -35,7 +35,7 @@ int init(card deck[], int playerCount);
 void displayCard(card playingCard);
 void shuffle(card deck[]);
 void printDeck(card deck[]);
-void dealCards(card deck[], int playerCount);
+void dealCards(card deck[], int playerCount, player *head);
 player *createPlayers(int playerCount);
 
 
@@ -54,6 +54,8 @@ int main(void)
         return 1;
     }
 
+
+
     // Display all cards in deck
     printDeck(deck);
 
@@ -61,19 +63,32 @@ int main(void)
 
     // Shuffle array in place
     shuffle(deck);
-    printDeck(deck);
+
+
+
+    // Create 4 player data structures
+    player *firstPlayer = createPlayers(playerCount);
+
+    // Check for errors in player initialization
+    if (firstPlayer == NULL)
+    {
+        printf("Player initialization error\n");
+        return 1;
+    }
 
 
     // Deal cards to all players
     // Will default to 4 players, possible implementation which allows players to choose amount of people in a room
-
+    dealCards(deck, playerCount, firstPlayer);
 
 
     return 0;
 }
 
 
-// Initialize game by creating deck of 52 cards and 4 players
+
+
+// Initialize game by creating deck of 52 cards
 int init(card deck[], int playerCount)
 {
     // Create deck
@@ -99,16 +114,6 @@ int init(card deck[], int playerCount)
             deck[pos] = *new;
             pos++;
         }
-    }
-
-    // Create players
-    player *firstPlayer = createPlayers(playerCount);
-
-    // Check for errors in player initialization
-    if (firstPlayer == NULL)
-    {
-        printf("Player initialization error\n");
-        return 1;
     }
 }
 
@@ -214,9 +219,11 @@ void printDeck(card deck[])
 
 // Takes in amount of players in current game, and deals cards in shuffled deck
 // evenly based on player count
-void dealCards(card deck[], int playerCount)
+void dealCards(card deck[], int playerCount, player *head)
 {
     int cardsPerPlayer = DECK_SIZE / playerCount;
+
+    // Traverse player list
 }
 
 
