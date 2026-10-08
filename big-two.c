@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+const int DECK_SIZE = 52;
+
 typedef struct 
 {
 
@@ -15,16 +17,31 @@ typedef struct
 
 } card;
 
+typedef struct 
+{
+    // Each player will be represented by a data structure,
+    // that contains an array of held cards
+    
+    card hand[13];
+
+} player;
+
+
 
 int init(card deck[]);
 void displayCard(card playingCard);
 void shuffle(card deck[]);
 void printDeck(card deck[]);
+void dealCards(card deck[], int playerCount);
+
 
 
 int main(void) 
 {
-    card deck[52];
+    // Initiazlie some variables and constants
+    card deck[DECK_SIZE];
+    int playerCount = 4;
+    player players[playerCount];
 
     // Initialize 
     printf("Welcome to Big Two!\n");
@@ -181,4 +198,15 @@ void printDeck(card deck[])
     {
         displayCard(deck[i]);
     }
+}
+
+
+// Takes in amount of players in current game, and deals cards in shuffled deck
+// evenly based on player count
+void dealCards(card deck[], int playerCount)
+{
+    int cardsPerPlayer = DECK_SIZE / playerCount;
+
+    // Create new player object for each player in the game
+
 }
