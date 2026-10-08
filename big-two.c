@@ -55,10 +55,7 @@ int main(void)
     }
 
     // Display all cards in deck
-    for (int i = 0; i < 52; i++)
-    {
-        displayCard(deck[i]);
-    }
+    printDeck(deck);
 
     printf("\n\n\n");
 
@@ -104,8 +101,17 @@ int init(card deck[], int playerCount)
         }
     }
 
+    // Create players
     player *firstPlayer = createPlayers(playerCount);
+
+    // Check for errors in player initialization
+    if (firstPlayer == NULL)
+    {
+        printf("Player initialization error\n");
+        return 1;
+    }
 }
+
 
 
 // Prints out value of specified card and suit to screen
@@ -230,11 +236,12 @@ player *createPlayers(int playerCount)
         // Check for malloc errors
         if (n == NULL)
         {
+            printf("Memory allocation error\n");
             return NULL;
         }
 
         if (head == NULL) {
-            head == n;
+            head = n;
         }
         else
         {
