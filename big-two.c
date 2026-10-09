@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -9,8 +10,8 @@ typedef struct
 
     // Cards will be a data struct with 2 ints
     // Suits will be from 0 to 3 in the order Diamonds, Clubs, Hearts, Spades
-    // Card values will be 10 for Jack, 11 for Queen, 12 for King, 13 for Ace.
-    // Due to game rules, 2 is the highest scoring card so it will be listed as 14
+    // Card values will be 11 for Jack, 12 for Queen, 13 for King, 14 for Ace.
+    // Due to game rules, 2 is the highest scoring card so it will be listed as 15
     
     int suit;
     int value;
@@ -43,9 +44,12 @@ void showHand(player* firstPlayer, int playerCount);
 
 int main(void) 
 {
-    // Initiazlie variables and constants
+    // Initialize variables and constants
     card deck[DECK_SIZE];
     int playerCount = 4;
+    bool gameOver = false;
+
+
 
     // Initialize 
     printf("Welcome to Big Two!\n");
@@ -54,7 +58,6 @@ int main(void)
         printf("Failed to initialize\n");
         return 1;
     }
-
 
 
     // Display all cards in deck
@@ -87,6 +90,12 @@ int main(void)
     showHand(firstPlayer, playerCount);
     
 
+    // Main game loop
+    while (!gameOver)
+    {
+        printf("Running\n");
+    }
+
     return 0;
 }
 
@@ -113,8 +122,8 @@ int init(card deck[], int playerCount)
                 return 1;
             }
 
-            new -> suit = i;
-            new -> value = j;
+            new->suit = i;
+            new->value = j;
 
             deck[pos] = *new;
             pos++;
@@ -238,12 +247,12 @@ void dealCards(card deck[], int playerCount, player *head)
         {
             // Assigns first X cards in shuffled deck to current player,
             // where X is the amount of cardsPerPlayer
-            ptr -> hand[j] = deck[deckIndex];
+            ptr->hand[j] = deck[deckIndex];
             deckIndex++;
         }
 
         // Move to next player
-        ptr = ptr -> next;
+        ptr = ptr->next;
     }
 }
 
@@ -276,23 +285,23 @@ player *createPlayers(int playerCount)
             player *tmp = head;
 
             // Traverse to the end of the linked list
-            while (tmp -> next != NULL)
+            while (tmp->next != NULL)
             {
-                tmp = tmp -> next;
+                tmp = tmp->next;
             }
 
             // Add new node to end of linked list
-            tmp -> next = n;
+            tmp->next = n;
 
             // If current player node is last, set pointer back to head 
             // Else, set pointer of new node to null
             if (i == playerCount - 1)
             {
-                n -> next = head;
+                n->next = head;
             }
             else
             {
-                n -> next = NULL;
+                n->next = NULL;
             }
         }
     }
@@ -313,10 +322,10 @@ void showHand(player* firstPlayer, int playerCount)
 
         for (int j = 0; j < 13; j++)
         {
-            displayCard(ptr -> hand[j]);
+            displayCard(ptr->hand[j]);
         }
 
         printf("\n");
-        ptr = ptr -> next;
+        ptr = ptr->next;
     }
 }
