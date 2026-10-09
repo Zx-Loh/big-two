@@ -38,7 +38,7 @@ void shuffle(card deck[]);
 void printDeck(card deck[]);
 void dealCards(card deck[], int playerCount, player *head);
 player *createPlayers(int playerCount);
-void showHand(player* firstPlayer, int playerCount);
+void showHand(player* currentPlayer);
 
 
 
@@ -87,11 +87,21 @@ int main(void)
 
 
     // Show distributed hand cards of all players
-    showHand(firstPlayer, playerCount);
+    player *tmp = firstPlayer;
+    for (int i = 0; i < playerCount; i++)
+    {
+        printf("Player %i's hand:\n", i + 1);
+        showHand(tmp);
+        tmp = tmp->next;
+    }
     
 
+    // Set variable to store current player
+    // This should be set to the first player at the start of the game.
+    player *currentPlayer = firstPlayer;
+
     // Main game loop
-    while (!gameOver)
+    while (gameOver)
     {
         printf("Running\n");
     }
@@ -314,20 +324,13 @@ player *createPlayers(int playerCount)
 
 
 // Function that traverses through all players and prints out all their hand cards
-void showHand(player* firstPlayer, int playerCount)
+void showHand(player* currPlayer)
 {
-    player *ptr = firstPlayer;
-
-    for (int i = 0; i < playerCount; i++)
+    for (int j = 0; j < 13; j++)
     {
-        printf("Player %i\n", i);
-
-        for (int j = 0; j < 13; j++)
-        {
-            displayCard(ptr->hand[j]);
-        }
-
-        printf("\n");
-        ptr = ptr->next;
+        printf("%i. ", j + 1);
+        displayCard(currPlayer->hand[j]);
     }
+
+    printf("\n");
 }
