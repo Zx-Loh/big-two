@@ -53,7 +53,7 @@ int main(void)
 
     // Initialize 
     printf("Welcome to Big Two!\n");
-    if (init(deck, playerCount) == 1)
+    if (init(deck, playerCount) != 0)
     {
         printf("Failed to initialize\n");
         return 1;
@@ -129,6 +129,8 @@ int init(card deck[], int playerCount)
             pos++;
         }
     }
+
+    return 0;
 }
 
 
