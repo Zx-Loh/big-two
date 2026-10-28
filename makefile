@@ -1,2 +1,2 @@
 all:
-	gcc big-two.c -o big-two
+	gcc -g big-two.c -o big-two
