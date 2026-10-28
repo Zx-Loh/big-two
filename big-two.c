@@ -26,6 +26,7 @@ typedef struct player
     // The players will form a linked list that also serves as turn order.
     
     card hand[13];
+    int handsize;
     struct player *next;
 
 } player;
@@ -39,9 +40,10 @@ void printDeck(card deck[]);
 void dealCards(card deck[], int playerCount, player *head);
 player *createPlayers(int playerCount);
 void showHand(player* currentPlayer);
+card removeCard(player* currPlayer, int index);
 
 
-
+// Main
 int main(void) 
 {
     // Initialize variables and constants
@@ -60,10 +62,10 @@ int main(void)
     }
 
 
-    // Display all cards in deck
-    printDeck(deck);
+    // // Display all cards in deck
+    // printDeck(deck);
 
-    printf("\n\n\n");
+    // printf("\n\n\n");
 
     // Shuffle array in place
     shuffle(deck);
@@ -87,18 +89,23 @@ int main(void)
 
 
     // Show distributed hand cards of all players
-    player *tmp = firstPlayer;
-    for (int i = 0; i < playerCount; i++)
-    {
-        printf("Player %i's hand:\n", i + 1);
-        showHand(tmp);
-        tmp = tmp->next;
-    }
+    // player *tmp = firstPlayer;
+    // for (int i = 0; i < playerCount; i++)
+    // {
+    //     printf("Player %i's hand:\n", i + 1);
+    //     showHand(tmp);
+    //     tmp = tmp->next;
+    // }
     
 
     // Set variable to store current player
     // This should be set to the first player at the start of the game.
     player *currentPlayer = firstPlayer;
+
+    // Test
+    showHand(currentPlayer);
+    removeCard(currentPlayer, 1);
+    showHand(currentPlayer);
 
     // Main game loop
     while (gameOver)
@@ -316,6 +323,9 @@ player *createPlayers(int playerCount)
                 n->next = NULL;
             }
         }
+
+        // Set player handsize to 13
+        n->handsize = 13;
     }
 
     return head;
@@ -326,11 +336,32 @@ player *createPlayers(int playerCount)
 // Function that traverses through all players and prints out all their hand cards
 void showHand(player* currPlayer)
 {
-    for (int j = 0; j < 13; j++)
+    for (int j = 0; j < currPlayer->handsize; j++)
     {
         printf("%i. ", j + 1);
         displayCard(currPlayer->hand[j]);
     }
 
     printf("\n");
+}
+
+
+
+// Function that removes card at specified index, and shifts remaining cards left to leave no gaps
+card removeCard(player* currPlayer, int index)
+{
+    // Remove card from players hand at index
+    card removedCard = currPlayer->hand[index];
+    
+    // Shift all remaining cards on the right one space leftwards to fill up gaps
+    for (int i = index; i < currPlayer->handsize; i++)
+    {
+        currPlayer->hand[i] = currPlayer->hand[i + 1];
+    }
+
+    // Reduce handsize by 1
+    currPlayer->handsize--;
+
+    // Return card removed
+    return removedCard;
 }
