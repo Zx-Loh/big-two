@@ -41,6 +41,7 @@ void dealCards(card deck[], int playerCount, player *head);
 player *createPlayers(int playerCount);
 void showHand(player* currentPlayer);
 card removeCard(player* currPlayer, int index);
+bool checkWin(player* currPlayer, int playerCount);
 
 
 // Main
@@ -87,30 +88,22 @@ int main(void)
     // Defautl is 4 players, possible future implementation which allows players to choose amount of people in a room
     dealCards(deck, playerCount, firstPlayer);
 
-
-    // Show distributed hand cards of all players
-    // player *tmp = firstPlayer;
-    // for (int i = 0; i < playerCount; i++)
-    // {
-    //     printf("Player %i's hand:\n", i + 1);
-    //     showHand(tmp);
-    //     tmp = tmp->next;
-    // }
     
-
     // Set variable to store current player
     // This should be set to the first player at the start of the game.
     player *currentPlayer = firstPlayer;
 
-    // Test
-    showHand(currentPlayer);
-    removeCard(currentPlayer, 1);
-    showHand(currentPlayer);
 
     // Main game loop
-    while (gameOver)
+    while (!gameOver)
     {
         printf("Running\n");
+
+        // Check if any player has fulfilled the win condition
+        gameOver = checkWin(currentPlayer, playerCount);
+
+        // If not, move to next player
+        currentPlayer = currentPlayer->next;
     }
 
     return 0;
@@ -364,4 +357,28 @@ card removeCard(player* currPlayer, int index)
 
     // Return card removed
     return removedCard;
+}
+
+
+
+// Function that checks whether the conditions for a win has been fulfilled
+bool checkWin(player* currPlayer, int playerCount)
+{
+    player* tmp = currPlayer;
+
+    // If any player has 0 handsize, they win
+    for (int i = 0; i < playerCount; i++)
+    {
+        // Loop through all players to check handsize
+        if (tmp->handsize <= 0)
+        {
+            printf("Player %i has played all their cards, the game is over\n", i);
+            return true;
+        }
+
+        tmp = tmp->next;
+    }
+
+    // If no player fulfills condition, game is not over, return false
+    return false;
 }
